@@ -6,12 +6,12 @@ import streamlit as st
 
 # Launch training job
 # We use the Estimator from the SageMaker Python SDK
-from sagemaker.sklearn.estimator import SKLearn
+from sagemaker.sklearn.estimator import XGBoost
 from sagemaker import get_execution_role
 
 FRAMEWORK_VERSION = "0.23-1"
 
-sklearn_estimator = SKLearn(
+xgboost_estimator = XGBoost(
     entry_point="script.py",
     role='iam_execution_role',
     instance_count=1,
@@ -21,4 +21,4 @@ sklearn_estimator = SKLearn(
 
 )
 
-sklearn_estimator.fit(wait=False)
+xgboost_estimator.fit(wait=False)
