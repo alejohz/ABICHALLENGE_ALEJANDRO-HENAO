@@ -1,1 +1,12 @@
 Repo for deploying an ML model into production for the ABinBev test.
+
+Developed by: Alejandro Henao
+Date: 29-Apr-2022
+
+Repo composed of:
+
+ahenao_web_app.py:
+    py script using streamlit web framework 
+
+Ml_model.py:
+    py script using sklearn for model deployment using sagemaker extracting data from S3
