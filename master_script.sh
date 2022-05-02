@@ -10,3 +10,4 @@ aws configure set aws_secret_access_key $SECRET_ACCESS_KEY
 aws configure set default.region $AWS_DEFAULT_REGION
 
 python ahenao_web_app.py
+open http://localhost:8501
