@@ -8,6 +8,11 @@ import sagemaker
 from read_upload import Read_Upload
 class sagemaker_xgboost:
     def __init__(self):
+        """
+        Initializing class with needed variables
+
+        bucket, hyperparams,instance type, output path, content type
+        """
         self.bucket = 'abi-datalake'
 
         self.hyperparams = {
@@ -31,6 +36,9 @@ class sagemaker_xgboost:
         self.session = Session()
         self.script_path = "script.py"
     def model_fit(self):
+        """
+        fit instance for XGBoost for classification of iris dataset
+        """
         self.xgb_script_mode_estimator = XGBoost(
             entry_point=self.script_path,
             framework_version="1.5-1",  # Note: framework_version is mandatory
