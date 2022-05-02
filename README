@@ -9,7 +9,7 @@ Endpoint with Sagemaker for on demand REQUESTS of the API.
 Proposed work if i had more time:
 - Develop streamlit app inside EC2
 - Use the secrets Github functionality for AWS credentials
-- Create Docker image for dependencies, this would help to upload to ECR and be able to run app inside EC2.
+- Upload Docker image to Dockerhub for dependencies, this would help to upload to ECR and be able to run app inside EC2.
 
 
 Conclusions:
