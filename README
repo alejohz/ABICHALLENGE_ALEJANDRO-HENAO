@@ -2,13 +2,8 @@
 Developed by: Alejandro Henao
 Date: 01-May-2022
 
-Repo composed of:
-
-ahenao_web_app.py:
-    py script using streamlit web framework 
-
-Ml_model.py:
-    py script using sklearn for model deployment using sagemaker extracting data from S3
+Repo composed of python files for the development of a web app using Streamlit using a pretrained model inside S3 and deploying an
+Endpoint with Sagemaker for on demand REQUESTS of the API.
 
 
 Proposed work if i had more time:
