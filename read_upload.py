@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 
 import xgboost as xgb
 
-class Read_Upload:
+class read_upload:
 
     def __init__(self, key=None):
         """
@@ -28,7 +28,7 @@ class Read_Upload:
     def __repr__(self):
         return 'Class for reading and uploading to S3'
 
-    def s3_read(self, source, profile_name=None):
+    def s3_read(self, source):
         """
         Read a file from an S3 source.
 
@@ -57,7 +57,7 @@ class Read_Upload:
         :return: True if file was uploaded, else False
         """
         try:
-            response = self.s3.upload_file(file, bucket_name, object_name)
+            self.s3.upload_file(file, bucket_name, object_name)
         except ClientError as e:
             logging.error(e)
             return False
@@ -67,7 +67,6 @@ if __name__ == '__main__':
     rsu = Read_Upload()
     bucket = 'abi-datalake'
 
-    #data = rsu.s3_read('s3://abi-datalake/raw/creditcard.csv')
     iris = datasets.load_iris() # Loading dataset
     X = iris.data # Spliting into dependent 
     y = iris.target # and independent variables
@@ -78,12 +77,15 @@ if __name__ == '__main__':
     dtrain = xgb.DMatrix(X_train, label=y_train) # converting into dmatrix
     dtest = xgb.DMatrix(X_test, label=y_test)
 
-    # use svmlight file for xgboost
-    dump_svmlight_file(X_train, y_train, 'dtrain.svm', zero_based=True) #dumping svm file to upload
-    dump_svmlight_file(X_test, y_test, 'dtest.svm', zero_based=True)
-    
-    train_path = "{}/{}".format("train",'dtrain.svm') #key and obbject name to upload to s3
-    test_path = "{}/{}".format("test",'dtest.svm')
+    train_file_name = 'dtrain.svm'
+    test_file_name = 'dtest.svm'
 
-    rsu.s3_upload(bucket_name=bucket, file= 'dtrain.svm',object_name = train_path) # uploading to datalake 
-    rsu.s3_upload(bucket_name=bucket, file=  'dtest.svm',object_name = test_path)
+    # use svmlight file for xgboost
+    dump_svmlight_file(X_train, y_train, train_file_name, zero_based=True) #dumping svm file to upload
+    dump_svmlight_file(X_test, y_test, test_file_name, zero_based=True)
+    
+    train_path = "{}/{}".format("train",train_file_name) #key and obbject name to upload to s3
+    test_path = "{}/{}".format("test",test_file_name)
+
+    rsu.s3_upload(bucket_name=bucket, file= train_file_name,object_name = train_path) # uploading to datalake 
+    rsu.s3_upload(bucket_name=bucket, file=  test_file_name,object_name = test_path)

@@ -10,7 +10,10 @@ from sklearn.datasets import load_iris
 from sm_model import sagemaker_xgboost
 
 
-# TODO: Read data from S3
+# TODO: 
+# 
+# Read data from S3
+# Define a class for the wep app
 iris_data = load_iris()
 # separate the data into features and target
 features = iris_data.feature_names
@@ -83,9 +86,6 @@ def construct_app():
         with st.spinner("Training ongoing"):
             if not hasattr(st, 'predictor'):
                 st.predictor = model.model_deploy()
-            predictor = st.predictor
-
-
 
     if st.button('CANCEL'):
         model.model_cancel()

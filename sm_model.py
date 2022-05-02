@@ -5,7 +5,10 @@ from sagemaker.inputs import TrainingInput
 from sagemaker.xgboost.estimator import XGBoost
 import sagemaker
 
-from read_upload import Read_Upload
+from read_upload import read_upload
+
+#TODO:
+# Get aws credentials instead of reading them from local
 class sagemaker_xgboost:
     def __init__(self):
         """
