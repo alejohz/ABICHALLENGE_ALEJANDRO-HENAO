@@ -1,16 +1,13 @@
+# Importing useful libraries
+
 import pandas as pd
 import numpy as np
 import streamlit as st
 import json
 
-from sagemaker.session import Session
-
 import plotly.graph_objects as go
-from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
-import xgboost as xgb
 from sm_model import sagemaker_xgboost
-import sagemaker
 
 
 # TODO: Read data from S3
