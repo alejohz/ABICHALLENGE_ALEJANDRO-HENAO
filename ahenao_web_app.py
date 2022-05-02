@@ -90,11 +90,10 @@ def construct_app():
                     st.predictor = model.model_deploy()
                     st.text('MODEL DEPLOYED')
                     st.session_state.load_state=True
-
+    st.text('Remember to cancel the endpoint')
     if st.button('CANCEL'):
         model.model_cancel(st.predictor)
-        st.stop()
-        quit()
+        st.session_state.load_state = False
     values = construct_sidebar()
     if st.checkbox('Calculate'):
 
