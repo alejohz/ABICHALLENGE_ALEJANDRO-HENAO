@@ -1,7 +1,6 @@
-Repo for deploying an ML model into production for the ABinBev test.
 
 Developed by: Alejandro Henao
-Date: 29-Apr-2022
+Date: 01-May-2022
 
 Repo composed of:
 
@@ -26,4 +25,3 @@ AWS Sagemaker is pretty slow and costly for on demand, probably AWS Lambda might
 Streamlit is pretty limmitted and has only linear workflow conditions, Flask could prove to be a more robust micro web framework solution.
 
 XGBoost is incredibly good for tabular data for very low training time and hyperparameter tuning.
-
