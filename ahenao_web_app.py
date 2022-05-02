@@ -16,7 +16,9 @@ from sm_model import sagemaker_xgboost
 # Define a class for the wep app
 iris_data = load_iris()
 # separate the data into features and target
-features = iris_data.feature_names
+features = pd.DataFrame(
+    iris_data.data, columns=iris_data.feature_names
+)
 y = iris_data.target
 
 model = sagemaker_xgboost()
@@ -25,30 +27,28 @@ def construct_sidebar():
 
     cols = [col for col in features.columns]
 
-    #Side bar title
     st.sidebar.markdown(
         '<p class="header-style">Iris Data Classification</p>',
         unsafe_allow_html=True
     )
-    #sepal length selector for prediction
     sepal_length = st.sidebar.selectbox(
         f"Select {cols[0]}",
-        sorted(features[0].unique())
+        sorted(features[cols[0]].unique())
     )
-    #sepal width selector for prediction
+
     sepal_width = st.sidebar.selectbox(
         f"Select {cols[1]}",
-        sorted(features[1].unique())
+        sorted(features[cols[1]].unique())
     )
-    #petal length selector for prediction
+
     petal_length = st.sidebar.selectbox(
         f"Select {cols[2]}",
-        sorted(features[2].unique())
+        sorted(features[cols[2]].unique())
     )
-    #petal width selector for prediction
+
     petal_width = st.sidebar.selectbox(
         f"Select {cols[3]}",
-        sorted(features[3].unique())
+        sorted(features[cols[3]].unique())
     )
     values = [sepal_length, sepal_width, petal_length, petal_width]
 
@@ -80,16 +80,21 @@ def plot_pie_chart(probabilities):
 def construct_app():
 
     st.header("AB in BEV web app deployment of sagemaker model")
+    st.session_state.load_state=False
 
-
+    st.text('Check Deploy checkbox for model deploying')
     if st.checkbox('DEPLOY'):
-        with st.spinner("Training ongoing"):
-            if not hasattr(st, 'predictor'):
-                st.predictor = model.model_deploy()
+        if not st.session_state.load_state:
+            with st.spinner("Training ongoing"):
+                if not hasattr(st, 'predictor'):
+                    st.predictor = model.model_deploy()
+                    st.text('MODEL DEPLOYED')
+                    st.session_state.load_state=True
 
     if st.button('CANCEL'):
-        model.model_cancel()
+        model.model_cancel(st.predictor)
         st.stop()
+        quit()
     values = construct_sidebar()
     if st.checkbox('Calculate'):
 
