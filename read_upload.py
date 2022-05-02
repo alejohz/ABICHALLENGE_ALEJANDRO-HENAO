@@ -16,6 +16,9 @@ import xgboost as xgb
 class Read_Upload:
 
     def __init__(self, key=None):
+        """
+        Initializing class object for reading and uploading other scripts, helper class
+        """
         self.sm_boto3 = boto3.client("sagemaker")
         self.session = boto3.Session()
         self.s3 = self.session.client('s3')
