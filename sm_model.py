@@ -62,6 +62,9 @@ class sagemaker_xgboost:
         )
 
     def model_deploy(self):
+        """
+        Loading an already trained model and deploying an endpoint to be able to REQUEST
+        """
         source = 's3://abi-datalake/sagemaker-xgboost-2022-05-01-20-18-16-799/source/sourcedir.tar.gz'
         model_data = 's3://abi-datalake/output/sagemaker-xgboost-2022-05-01-20-18-16-799/output/model.tar.gz'
         model = sagemaker.model.Model(
@@ -77,7 +80,11 @@ class sagemaker_xgboost:
         return self.predictor
 
     def model_predict(self, input_data, predictor, testing=False):
+        """
+        Model predictions of test data or input data for the web app.
 
+        
+        """
         if testing:
             self.payload_path = "s3://{}/{}/{}".format(self.bucket, "test", "dtest.svm")
             rsu = Read_Upload()
@@ -99,6 +106,9 @@ class sagemaker_xgboost:
         return result
        
     def model_cancel(self, predictor):
+        """
+        Function to erase model and endpoint to avoid high costs in sagemaker services
+        """
         predictor.delete_model()
         predictor.delete_endpoint()
 

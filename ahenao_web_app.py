@@ -25,25 +25,27 @@ def construct_sidebar():
 
     cols = [col for col in features.columns]
 
+    #Side bar title
     st.sidebar.markdown(
         '<p class="header-style">Iris Data Classification</p>',
         unsafe_allow_html=True
     )
+    #sepal length selector for prediction
     sepal_length = st.sidebar.selectbox(
         f"Select {cols[0]}",
         sorted(features[0].unique())
     )
-
+    #sepal width selector for prediction
     sepal_width = st.sidebar.selectbox(
         f"Select {cols[1]}",
         sorted(features[1].unique())
     )
-
+    #petal length selector for prediction
     petal_length = st.sidebar.selectbox(
         f"Select {cols[2]}",
         sorted(features[2].unique())
     )
-
+    #petal width selector for prediction
     petal_width = st.sidebar.selectbox(
         f"Select {cols[3]}",
         sorted(features[3].unique())
@@ -53,6 +55,12 @@ def construct_sidebar():
     return values
 
 def plot_pie_chart(probabilities):
+    """
+    Function to plot and show probability distribution of the 3 classes:
+    Params:
+    Probabilites list
+        3 floating numbers indicating probability of the sample belonging to the index class
+    """
     fig = go.Figure(
         data=[go.Pie(
                 labels=list(iris_data.target_names),
@@ -70,6 +78,7 @@ def plot_pie_chart(probabilities):
 
 
 def construct_app():
+
     st.header("AB in BEV web app deployment of sagemaker model")
 
 

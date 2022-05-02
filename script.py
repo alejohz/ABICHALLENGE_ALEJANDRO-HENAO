@@ -10,10 +10,8 @@ from sagemaker_containers import entry_point
 from sagemaker_xgboost_container.data_utils import get_dmatrix
 from sagemaker_xgboost_container import distributed
 
-#from ML_model import Model
-
-#from read_upload import Read_Upload
-#rsu = Read_Upload()
+# Code extracted from https://github.com/aws/amazon-sagemaker-examples/blob/main/introduction_to_amazon_algorithms/xgboost_abalone/xgboost_abalone_dist_script_mode.ipynb
+# License: Apache 2.0 License
 
 def _xgb_train(params, dtrain, evals, num_boost_round, model_dir, is_master):
     """Run xgb train on arguments given with rabit initialized.

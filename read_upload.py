@@ -68,22 +68,22 @@ if __name__ == '__main__':
     bucket = 'abi-datalake'
 
     #data = rsu.s3_read('s3://abi-datalake/raw/creditcard.csv')
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
+    iris = datasets.load_iris() # Loading dataset
+    X = iris.data # Spliting into dependent 
+    y = iris.target # and independent variables
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # test_train splitting
 
     # use DMatrix for xgboost
-    dtrain = xgb.DMatrix(X_train, label=y_train)
+    dtrain = xgb.DMatrix(X_train, label=y_train) # converting into dmatrix
     dtest = xgb.DMatrix(X_test, label=y_test)
 
     # use svmlight file for xgboost
-    dump_svmlight_file(X_train, y_train, 'dtrain.svm', zero_based=True)
+    dump_svmlight_file(X_train, y_train, 'dtrain.svm', zero_based=True) #dumping svm file to upload
     dump_svmlight_file(X_test, y_test, 'dtest.svm', zero_based=True)
     
-    train_path = "{}/{}".format("train",'dtrain.svm')
+    train_path = "{}/{}".format("train",'dtrain.svm') #key and obbject name to upload to s3
     test_path = "{}/{}".format("test",'dtest.svm')
 
-    rsu.s3_upload(bucket_name=bucket, file= 'dtrain.svm',object_name = train_path)
+    rsu.s3_upload(bucket_name=bucket, file= 'dtrain.svm',object_name = train_path) # uploading to datalake 
     rsu.s3_upload(bucket_name=bucket, file=  'dtest.svm',object_name = test_path)
