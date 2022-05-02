@@ -1,17 +1,17 @@
 import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
 
 import logging
 import boto3
 from botocore.exceptions import ClientError
 
-from sklearn.model_selection import StratifiedShuffleSplit
 
-import os
 from mpu.aws import _s3_path_split
 import io
+from sklearn import datasets
+from sklearn.datasets import dump_svmlight_file
+from sklearn.model_selection import train_test_split
 
+import xgboost as xgb
 
 class Read_Upload:
 
@@ -40,12 +40,11 @@ class Read_Upload:
         """
         self.bucket_name, self.key = _s3_path_split(source) 
         s3_object = self.s3.get_object(Bucket=self.bucket_name, Key=self.key)
-        body = s3_object['Body']
-        self.file = pd.read_csv(io.BytesIO(body.read()))
-        return self.file
+        self.body = s3_object['Body']
+        return self.body.read()
     
 
-    def s3_upload(self, file, object_name):
+    def s3_upload(self, bucket_name, file, object_name):
         """Upload a file to an S3 bucket
 
         Parameters:
@@ -55,7 +54,7 @@ class Read_Upload:
         :return: True if file was uploaded, else False
         """
         try:
-            response = self.s3.upload_file(file, self.bucket_name, object_name)
+            response = self.s3.upload_file(file, bucket_name, object_name)
         except ClientError as e:
             logging.error(e)
             return False
@@ -63,23 +62,25 @@ class Read_Upload:
 
 if __name__ == '__main__':
     rsu = Read_Upload()
-    data = rsu.s3_read('s3://abi-datalake/raw/creditcard.csv')
-    X_train, X_test, y_train, y_test = rsu.split(test_size=0.2)
-    train = pd.concat(X_train, y_train)
-    test = pd.concat(X_test, y_test)
+    bucket = 'abi-datalake'
 
-    train_file_name = 'train.csv'
-    test_file_name = 'test.csv'
+    #data = rsu.s3_read('s3://abi-datalake/raw/creditcard.csv')
+    iris = datasets.load_iris()
+    X = iris.data
+    y = iris.target
 
-    train_key = 'train/'
-    test_key = 'test/'
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    train.to_csv(train_file_name)
-    test.to_csv(test_file_name)
+    # use DMatrix for xgboost
+    dtrain = xgb.DMatrix(X_train, label=y_train)
+    dtest = xgb.DMatrix(X_test, label=y_test)
+
+    # use svmlight file for xgboost
+    dump_svmlight_file(X_train, y_train, 'dtrain.svm', zero_based=True)
+    dump_svmlight_file(X_test, y_test, 'dtest.svm', zero_based=True)
     
+    train_path = "{}/{}".format("train",'dtrain.svm')
+    test_path = "{}/{}".format("test",'dtest.svm')
 
-    train_path_abs = os.path.dirname(os.path.join(os.path.abspath(train_file_name), train_file_name))
-    test_path_abs = os.path.dirname(os.path.join(os.path.abspath(test_file_name), test_file_name))
-    
-    rsu.s3_upload(train_path_abs, train_key + train_file_name)
-    rsu.s3_upload(test_path_abs, test_key + test_file_name)
+    rsu.s3_upload(bucket_name=bucket, file= 'dtrain.svm',object_name = train_path)
+    rsu.s3_upload(bucket_name=bucket, file=  'dtest.svm',object_name = test_path)
