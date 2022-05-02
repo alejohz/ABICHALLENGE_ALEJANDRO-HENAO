@@ -16,9 +16,7 @@ import sagemaker
 # TODO: Read data from S3
 iris_data = load_iris()
 # separate the data into features and target
-features = pd.DataFrame(
-    iris_data.data, columns=iris_data.feature_names
-)
+features = iris_data.feature_names
 y = iris_data.target
 
 model = sagemaker_xgboost()
@@ -33,22 +31,22 @@ def construct_sidebar():
     )
     sepal_length = st.sidebar.selectbox(
         f"Select {cols[0]}",
-        sorted(features[cols[0]].unique())
+        sorted(features[0].unique())
     )
 
     sepal_width = st.sidebar.selectbox(
         f"Select {cols[1]}",
-        sorted(features[cols[1]].unique())
+        sorted(features[1].unique())
     )
 
     petal_length = st.sidebar.selectbox(
         f"Select {cols[2]}",
-        sorted(features[cols[2]].unique())
+        sorted(features[2].unique())
     )
 
     petal_width = st.sidebar.selectbox(
         f"Select {cols[3]}",
-        sorted(features[cols[3]].unique())
+        sorted(features[3].unique())
     )
     values = [sepal_length, sepal_width, petal_length, petal_width]
 
@@ -94,7 +92,9 @@ def construct_app():
         r = r.decode()
         r = r.split(",")
         r = [float(a) for a in r]
+        st.text('This is the prediction from XGBoost model')
         st.text(r)
+        st.text('This are the values inputted for the prediction')
         st.text(values)
         p1 = r[0]
         p2 = r[1]
