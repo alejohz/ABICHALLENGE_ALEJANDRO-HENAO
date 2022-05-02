@@ -82,7 +82,13 @@ class sagemaker_xgboost:
     def model_predict(self, input_data, predictor, testing=False):
         """
         Model predictions of test data or input data for the web app.
-
+        Params:
+        input_data: bytes 
+            values inside side bar in the web app for prediction
+        predictor: model.deploy instance of the XGBoost classifier 
+            model after deserializing from S3 source
+        testing:bool
+            if inside web app or testing
         
         """
         if testing:

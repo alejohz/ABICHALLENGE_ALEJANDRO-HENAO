@@ -10,3 +10,20 @@ ahenao_web_app.py:
 
 Ml_model.py:
     py script using sklearn for model deployment using sagemaker extracting data from S3
+
+
+Proposed work if i had more time:
+- Develop streamlit app inside EC2
+- Use the secrets Github functionality for AWS credentials
+- Create Docker image for dependencies, this would help to upload to ECR and be able to run app inside EC2.
+
+
+Conclusions:
+Developing the streamlit app inside EC2 would prove to be a better solution due to not running on local, however EC2 instances are very high cost.
+
+AWS Sagemaker is pretty slow and costly for on demand, probably AWS Lambda might be a better solution.
+
+Streamlit is pretty limmitted and has only linear workflow conditions, Flask could prove to be a more robust micro web framework solution.
+
+XGBoost is incredibly good for tabular data for very low training time and hyperparameter tuning.
+
