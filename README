@@ -20,3 +20,5 @@ AWS Sagemaker is pretty slow and costly for on demand, probably AWS Lambda might
 Streamlit is pretty limmitted and has only linear workflow conditions, Flask could prove to be a more robust micro web framework solution.
 
 XGBoost is incredibly good for tabular data for very low training time and hyperparameter tuning.
+
+NOTE: CODE IS NOT FUNCTIONAL, access keys are deactivated.
